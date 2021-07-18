@@ -1,9 +1,19 @@
-# Recipe-Tagger 
+# Recipe-Tagger
 
-This library provide a recipe category classification based on its ingredient into the following categories:
+This library provides a classification and tagging system for ingredients and recipes. 
+An ingredient could be classified in one of the following class: 
 - Vegetable
 - Fruit
-- Meat 
 - Legume
+- Meat
 - Egg
-- Dairy
+- Diary
+- Staple
+
+A recipe is tagged based on its ingredients class. 
+The library also provides a function to get the class percentage of recipe ingredients. 
+
+### How to use
+
+### Todo
+

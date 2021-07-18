@@ -7,6 +7,6 @@ setup(
     description='A library for tagging and classify recipes',
     author='Andrea Turconi',
     license='MIT',
-    install_requires=[],
+    install_requires=['wikipedia', 'PyDictionary', 'textblob'],
     test_suite='tests',
 )
