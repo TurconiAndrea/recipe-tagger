@@ -8,6 +8,7 @@ setup(
     author='Andrea Turconi',
     license='MIT',
     url='https://github.com/TurconiAndrea/recipe-tagger',
+    download_url='https://github.com/TurconiAndrea/recipe-tagger/archive/refs/tags/0.2.0.tar.gz',
     keywords=['food', 'recipe', 'tag', 'tagging', 'ingredient'],
     install_requires=['wikipedia', 'PyDictionary', 'textblob', 'pyfood', 'unidecode'],
     test_suite='tests',
