@@ -17,7 +17,7 @@ setup(
     long_description=README,
     long_description_content_type="text/markdown",
     url='https://github.com/TurconiAndrea/recipe-tagger',
-    download_url='https://github.com/TurconiAndrea/recipe-tagger/archive/refs/tags/0.2.0.tar.gz',
+    download_url='https://github.com/TurconiAndrea/recipe-tagger/archive/refs/tags/0.2.1.tar.gz',
     keywords=['food', 'recipe', 'tag', 'tagging', 'ingredient'],
     install_requires=['wikipedia', 'PyDictionary', 'textblob', 'pyfood', 'unidecode'],
     test_suite='tests',
