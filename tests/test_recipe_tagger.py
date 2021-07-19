@@ -2,17 +2,17 @@ import pytest
 
 from recipe_tagger import recipe_tagger
 
-@pytest.mark.skip()
+#@pytest.mark.skip()
 def test_lemmatize_word():
     assert recipe_tagger.lemmatize_word('aubergines') == 'aubergine'
     assert recipe_tagger.lemmatize_word('legumes') == 'legume'
 
-@pytest.mark.skip()
+#@pytest.mark.skip()
 def test_is_ingredient_vegan():
     assert recipe_tagger.is_ingredient_vegan('apple') == True
     assert recipe_tagger.is_ingredient_vegan('chicken') == False
 
-@pytest.mark.skip()
+#@pytest.mark.skip()
 def test_is_recipe_vegan():
     assert recipe_tagger.is_recipe_vegan(['apple', 'chicken']) == False
     assert recipe_tagger.is_recipe_vegan(['apple', 'pear']) == True
@@ -34,6 +34,7 @@ def test_get_recipe_class_percentage():
 
 #@pytest.mark.skip()
 def test_get_recipe_tags():
-    assert recipe_tagger.get_recipe_tags(['chicken', 'sausage', 'apple']) == ['meat', 'fruit']
     assert recipe_tagger.get_recipe_tags(['aubergine']) == ['vegetable']
     assert 'fruit' in recipe_tagger.get_recipe_tags(['pear', 'apple', 'aubergine'])
+    assert all(ing in ['staple', 'vegetable'] for ing in recipe_tagger.get_recipe_tags(['bread', 'tomatoes']))
+    assert all(ing in ['meat', 'fruit'] for ing in recipe_tagger.get_recipe_tags(['chicken', 'sausage', 'apple']))
