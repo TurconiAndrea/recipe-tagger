@@ -7,6 +7,8 @@ setup(
     description='A library for tagging and classify recipes',
     author='Andrea Turconi',
     license='MIT',
-    install_requires=['wikipedia', 'PyDictionary', 'textblob'],
+    install_requires=['wikipedia', 'PyDictionary', 'textblob', 'pyfood', 'unidecode'],
     test_suite='tests',
+    include_package_data=True,
+    package_data={'': ['data/*.npy']},
 )

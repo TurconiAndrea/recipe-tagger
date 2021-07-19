@@ -1,14 +1,17 @@
+import io
 import numpy as np
-import wikipedia
+import pkgutil
 import re
+import wikipedia
 
+from . import data
 from .foodcategory import FoodCategory
 from collections import Counter
 from PyDictionary import PyDictionary
 from pyfood.utils import Shelf
 from textblob import Word
 
-embedding_path = 'recipe_tagger/ingredient_embedding.npy'
+embedding_path = 'data/ingredient_embedding.npy'
 
 def lemmatize_word(word):
     """
@@ -74,7 +77,8 @@ def get_ingredient_class(ingredient):
     :param ingredient: the name of the ingredient.
     :return: the class of the ingredient.
     """
-    embedding = np.load(embedding_path, allow_pickle=True).item()
+    embedding = io.BytesIO(pkgutil.get_data(__name__, embedding_path))
+    embedding = np.load(embedding, allow_pickle=True).item()
     if ingredient in embedding:
         lemmatized_ing = lemmatize_word(ingredient)
         return FoodCategory(embedding[lemmatized_ing]).name
