@@ -7,4 +7,7 @@ class FoodCategory(Enum):
     meat = 3
     egg = 4
     dairy = 5
-    staple = 6    
+    staple = 6  
+    condiment = 7  
+    nut = 8  
+    seafood = 9
