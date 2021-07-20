@@ -19,7 +19,7 @@ setup(
     url='https://github.com/TurconiAndrea/recipe-tagger',
     download_url='https://github.com/TurconiAndrea/recipe-tagger/archive/refs/tags/0.2.1.tar.gz',
     keywords=['food', 'recipe', 'tag', 'tagging', 'ingredient'],
-    install_requires=['wikipedia', 'PyDictionary', 'textblob', 'pyfood', 'unidecode'],
+    install_requires=['wikipedia-api', 'PyDictionary', 'textblob', 'pyfood', 'unidecode', 'numpy'],
     test_suite='tests',
     include_package_data=True,
     package_data={'': ['data/*.npy']},

@@ -2,9 +2,8 @@ import io
 import numpy as np
 import pkgutil
 import re
-import wikipedia
+import wikipediaapi
 
-from . import data
 from .foodcategory import FoodCategory
 from collections import Counter
 from PyDictionary import PyDictionary
@@ -56,8 +55,11 @@ def search_ingredient_class(ingredient):
     :return: the class of the ingredient.
     """
     dictionary = PyDictionary()
-    page = wikipedia.page(f'{ingredient}')
+    wiki = wikipediaapi.Wikipedia('en')
+
+    page = wiki.page(ingredient)
     ontology = ', '.join(dictionary.meaning(ingredient)['Noun'])
+    
     categories = []
     for category in FoodCategory:
         if page and re.search(r'\b({0})\b'.format(category.name), page.summary):

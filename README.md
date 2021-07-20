@@ -53,6 +53,6 @@ recipe_tagger.get_recipe_class_percentage(['aubergine', 'chicken', 'beef'])
 ```
 
 ### Todo
-- [ ] Handling of Wikipedia pages.
+- [x] Handling of Wikipedia pages.
 - [ ] Better search over dictionary and Wikipedia pages of ingredient. 
 - [ ] Possibility to add ingredient after search if it is not present. 

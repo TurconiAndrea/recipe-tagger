@@ -27,6 +27,7 @@ def test_get_ingredient_class():
     assert recipe_tagger.get_ingredient_class('aubergine') == 'vegetable'
     assert recipe_tagger.get_ingredient_class('apple') == 'fruit'
     assert recipe_tagger.get_ingredient_class('chicken') == 'meat'
+    assert recipe_tagger.get_ingredient_class('cattle') == 'meat'
 
 @pytest.mark.skip()
 def test_get_recipe_class_percentage():
