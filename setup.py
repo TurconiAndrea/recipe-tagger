@@ -10,7 +10,7 @@ README = (HERE / "README.md").read_text()
 setup(
     name='recipe-tagger',
     packages=find_packages(include=['recipe_tagger']),
-    version='0.2.2',
+    version='0.3.2',
     description='A library for tagging and classify recipes',
     author='Andrea Turconi',
     license='MIT',
