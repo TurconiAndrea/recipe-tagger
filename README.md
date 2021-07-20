@@ -27,27 +27,27 @@ pip install recipe_tagger
 
 ### How to use
 
-```
+```python
 from recipe_tagger import recipe_tagger
 ```
 
 **Get the class of a single ingredient**
 
-```
+```python
 recipe_tagger.get_ingredient_class('aubergine')
 # vegetable
 ```
 
 **Get tags of a recipe (it is needed to provide all the ingredient of the recipe)**
 
-```
+```python
 recipe_tagger.get_recipe_tags(['aubergine', 'chicken'])
 # ['vegetable', 'meat']
 ```
 
 **Get class percentage of a recipe (it is needed to provide all the ingredient of the recipe)**
 
-```
+```python
 recipe_tagger.get_recipe_class_percentage(['aubergine', 'chicken', 'beef'])
 # [('vegetable', '33.33%'), ('meat', '66.67%')]
 ```
