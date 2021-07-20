@@ -21,6 +21,5 @@ setup(
     keywords=['food', 'recipe', 'tag', 'tagging', 'ingredient'],
     install_requires=['wikipedia-api', 'PyDictionary', 'textblob', 'pyfood', 'unidecode', 'numpy'],
     test_suite='tests',
-    include_package_data=True,
     package_data={'': ['data/*.npy']},
 )
