@@ -121,7 +121,7 @@ def get_ingredient_class(ingredient):
         return FoodCategory(embedding[lemmatized_ing]).name
     else:
         web_class = search_ingredient_class(ingredient)
-        hyp_class = search_ingredient_hypernyms(ingredient)
+        hyp_class = search_ingredient_hypernyms(lemmatized_ing)
         return web_class if web_class else hyp_class
 
 def get_recipe_class_percentage(ingredients):
