@@ -14,6 +14,10 @@ from textblob import Word
 
 embedding_path = 'data/ingredient_embedding.npy'
 
+def __get_embedding():
+    embedding = io.BytesIO(pkgutil.get_data(__name__, embedding_path))
+    return np.load(embedding, allow_pickle=True).item()
+
 def lemmatize_word(word):
     """
     Lemmatize the provided word.
@@ -47,6 +51,9 @@ def is_recipe_vegan(ingredients):
     shelf = Shelf('Milan', month_id=0)
     results=shelf.process_ingredients(ingredients)
     return results['labels']['vegan']
+
+def add_ingredient(ingredient, tag):
+    embedding = __get_embedding()
 
 def search_ingredient_hypernyms(ingredient):
     """
@@ -108,10 +115,9 @@ def get_ingredient_class(ingredient):
     :param ingredient: the name of the ingredient.
     :return: the class of the ingredient.
     """
-    embedding = io.BytesIO(pkgutil.get_data(__name__, embedding_path))
-    embedding = np.load(embedding, allow_pickle=True).item()
-    if ingredient in embedding:
-        lemmatized_ing = lemmatize_word(ingredient)
+    embedding = __get_embedding()
+    lemmatized_ing = lemmatize_word(ingredient)
+    if lemmatized_ing in embedding:
         return FoodCategory(embedding[lemmatized_ing]).name
     else:
         web_class = search_ingredient_class(ingredient)
