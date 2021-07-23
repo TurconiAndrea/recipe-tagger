@@ -4,8 +4,10 @@ import pkgutil
 import re
 import wikipediaapi
 
+from .foodcategory import CategorySynset
 from .foodcategory import FoodCategory
 from collections import Counter
+from nltk.corpus import wordnet
 from PyDictionary import PyDictionary
 from pyfood.utils import Shelf
 from textblob import Word
@@ -46,6 +48,36 @@ def is_recipe_vegan(ingredients):
     results=shelf.process_ingredients(ingredients)
     return results['labels']['vegan']
 
+def search_ingredient_hypernyms(ingredient):
+    """
+    Predict the class of the provided ingredient based on the Wu & Palmer’s similarity between
+    ingredient, his hypernyms and the 10 FoodCategory. 
+    The FoodCategory is choosen based on the maximum similarity value between the ingredient, 
+    its hypernym and the various categories. If the predicted category is different between ingredient
+    and hypernym the category is choosen based on the avarege of both. 
+
+    :param ingredient: the name of the ingredient.
+    :return: the class of the ingredient.
+    """
+    ingredient = wordnet.synset(f'{ingredient}.n.01')
+    hypernym = ingredient.hypernyms()[0]
+    categories = CategorySynset.categories
+
+    sim = []
+    hypernym_sim = []
+    for cat in categories:
+        sim.append(ingredient.wup_similarity(cat))
+        hypernym_sim.append(hypernym.wup_similarity(cat))
+    
+    best_sim = sim.index(max(sim))
+    best_hyp = hypernym_sim.index(max(hypernym_sim))
+
+    if best_sim == best_hyp: 
+        return FoodCategory(best_sim).name
+    else: 
+        sum = [(x + y)/2 for x, y in zip(sim, hypernym_sim)]
+        return FoodCategory(sum.index(max(sum)))
+
 def search_ingredient_class(ingredient):
     """
     Search on wikipedia and english dictionary the class of the provided ingredient.
@@ -66,15 +98,12 @@ def search_ingredient_class(ingredient):
             categories.append(category.name)
         if re.search(r'\b({0})\b'.format(category.name), ontology):
             categories.append(category.name)
-    if categories:
-        return max(categories,key=categories.count) 
-    else:
-        return categories
+    return max(categories, key=categories.count) if len(categories) else None
 
 def get_ingredient_class(ingredient):
     """
     Predict the class of the provided ingredient based on the embeddings. 
-    If the ingredient cannot be found in the dictionary it will be searched on wikipedia pages.
+    If the ingredient cannot be found in the dictionary it will be searched on wikipedia pages or hypernyms.
 
     :param ingredient: the name of the ingredient.
     :return: the class of the ingredient.
@@ -85,7 +114,9 @@ def get_ingredient_class(ingredient):
         lemmatized_ing = lemmatize_word(ingredient)
         return FoodCategory(embedding[lemmatized_ing]).name
     else:
-        return search_ingredient_class(ingredient)
+        web_class = search_ingredient_class(ingredient)
+        hyp_class = search_ingredient_hypernyms(ingredient)
+        return web_class if web_class else hyp_class
 
 def get_recipe_class_percentage(ingredients):
     """
@@ -107,4 +138,6 @@ def get_recipe_tags(ingredients):
     :param ingredients: list of ingredients in the recipe.
     :return: set of tags for the recipe. 
     """
-    return list(set([get_ingredient_class(ingredient) for ingredient in ingredients]))               
+    tags = [get_ingredient_class(ingredient) for ingredient in ingredients]
+    if None in tags: tags.remove(None)
+    return list(set(tags)) if len(tags) else tags    
