@@ -18,6 +18,10 @@ def test_is_recipe_vegan():
     assert recipe_tagger.is_recipe_vegan(['apple', 'pear']) == True
 
 #@pytest.mark.skip()
+def test_add_ingredient():
+    assert recipe_tagger.add_ingredient('milk', 'dairy') == True
+
+#@pytest.mark.skip()
 def test_search_ingredient_hypernyms():
     assert recipe_tagger.search_ingredient_hypernyms('pear') == 'fruit'
     assert recipe_tagger.search_ingredient_hypernyms('chicken') == 'meat'
@@ -39,11 +43,11 @@ def test_get_ingredient_class():
     assert recipe_tagger.get_ingredient_class('cattle') == 'meat'
     assert recipe_tagger.get_ingredient_class('milk') == 'dairy'
 
-@pytest.mark.skip()
+#@pytest.mark.skip()
 def test_get_recipe_class_percentage():
     assert recipe_tagger.get_recipe_class_percentage(['chicken', 'sausage', 'apple']) == [('meat', '66.67%'), ('fruit', '33.33%')]
 
-@pytest.mark.skip()
+#@pytest.mark.skip()
 def test_get_recipe_tags():
     assert recipe_tagger.get_recipe_tags(['aubergine']) == ['vegetable']
     assert 'fruit' in recipe_tagger.get_recipe_tags(['pear', 'apple', 'aubergine'])

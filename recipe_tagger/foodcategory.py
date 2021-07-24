@@ -12,6 +12,7 @@ class FoodCategory(Enum):
     condiment = 7  
     nut = 8  
     seafood = 9
+    dessert = 10
 
 class CategorySynset():
     categories = [wordnet.synset(f'{FoodCategory.vegetable.name}.n.01'),

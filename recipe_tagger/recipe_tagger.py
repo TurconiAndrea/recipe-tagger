@@ -15,8 +15,13 @@ from textblob import Word
 embedding_path = 'data/ingredient_embedding.npy'
 
 def __get_embedding():
-    embedding = io.BytesIO(pkgutil.get_data(__name__, embedding_path))
-    return np.load(embedding, allow_pickle=True).item()
+    """
+    Get the dataset of ingredients as a dictionary.
+
+    :return: a dictionary representing the embedding
+    """
+    embedding_io = io.BytesIO(pkgutil.get_data(__name__, embedding_path))
+    return np.load(embedding_io, allow_pickle=True).item()
 
 def lemmatize_word(word):
     """
@@ -36,6 +41,7 @@ def is_ingredient_vegan(ingredient):
     :param ingredient: the name of the ingredient.
     :return: a bool indicating whether the ingredient is vegan or not.
     """
+    ingredient = ingredient.strip()
     shelf = Shelf('Milan', month_id=0)
     results = shelf.process_ingredients([ingredient])
     return results['labels']['vegan']
@@ -53,12 +59,28 @@ def is_recipe_vegan(ingredients):
     return results['labels']['vegan']
 
 def add_ingredient(ingredient, tag):
+    """
+    Map the provided ingredient and the tag into the embedding dataset. 
+    Tag must be one the following FoodCategory: 
+    vegetable, fruit, meat, legume, diary, egg, staple, condiment, nut, seafood, dessert
+
+    :param ingredient: the name of the ingredient.
+    :param tag: the class of the ingredient. Must be one of the listed above.
+    :return: a bool indicating if the operation has succeded or not. 
+    """
     embedding = __get_embedding()
+    ingredient = ingredient.strip()
+    tag = tag.strip()
+    if ingredient in embedding:
+        return False
+    
+    embedding[ingredient] = FoodCategory[tag].value
+    return True
 
 def search_ingredient_hypernyms(ingredient):
     """
     Predict the class of the provided ingredient based on the Wu & Palmer’s similarity between
-    ingredient, his hypernyms and the 10 FoodCategory. 
+    ingredient, his hypernyms and the 11 FoodCategory. 
     The FoodCategory is choosen based on the maximum similarity value between the ingredient, 
     its hypernym and the various categories. If the predicted category is different between ingredient
     and hypernym the category is choosen based on the avarege of both. 
@@ -116,6 +138,7 @@ def get_ingredient_class(ingredient):
     :return: the class of the ingredient.
     """
     embedding = __get_embedding()
+    ingredient = ingredient.strip()
     lemmatized_ing = lemmatize_word(ingredient)
     if lemmatized_ing in embedding:
         return FoodCategory(embedding[lemmatized_ing]).name
@@ -139,7 +162,7 @@ def get_recipe_class_percentage(ingredients):
 def get_recipe_tags(ingredients):
     """
     Classify a recipe in tags based on its ingredient. 
-    Tag could be: Vegetable, Fruit, Meat, Legume, Diary, Egg. 
+    Tag could be: Vegetable, Fruit, Meat, Legume, Diary, Egg, Staple, Condiment, Nut, Seafood 
 
     :param ingredients: list of ingredients in the recipe.
     :return: set of tags for the recipe. 
