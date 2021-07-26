@@ -57,3 +57,6 @@ recipe_tagger.get_recipe_class_percentage(['aubergine', 'chicken', 'beef'])
 - [x] Handling of Wikipedia pages.
 - [x] Better search over dictionary and Wikipedia pages of ingredient. 
 - [ ] Possibility to add ingredient after search if it is not present. 
+- [ ] Remove punctuation in provided ingrediets.
+- [ ] Remove condiment if there are any other classes.
+- [ ] Better search if the provided ingredient is composed by 2 words.
