@@ -110,6 +110,7 @@ def test_get_recipe_tags():
     This means that all the ingredients of the recipe must be classified correctly.
     """
     assert recipe_tagger.get_recipe_tags(["aubergine"]) == ["vegetable"]
+    assert recipe_tagger.get_recipe_tags(["olive oil", "chicken"]) == ["meat"]
     assert "fruit" in recipe_tagger.get_recipe_tags(["pear", "apple", "aubergine"])
     assert all(
         ing in ["staple", "vegetable"]

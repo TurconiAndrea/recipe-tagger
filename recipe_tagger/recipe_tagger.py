@@ -10,6 +10,7 @@ from collections import Counter
 
 import numpy as np
 import wikipediaapi
+from nltk import tag
 from nltk.corpus import wordnet
 from PyDictionary import PyDictionary
 from pyfood.utils import Shelf
@@ -28,6 +29,11 @@ def __get_embedding():
     """
     embedding_io = io.BytesIO(pkgutil.get_data(__name__, embedding_path))
     return np.load(embedding_io, allow_pickle=True).item()
+
+
+def __remove_punctuation(word):
+    word = word.strip()
+    return re.sub(r"[^\w\s]", "", word)
 
 
 def lemmatize_word(word):
@@ -163,7 +169,7 @@ def get_ingredient_class(ingredient):
     :return: the class of the ingredient.
     """
     embedding = __get_embedding()
-    ingredient = ingredient.strip()
+    ingredient = __remove_punctuation(ingredient)
     lemmatized_ing = lemmatize_word(ingredient)
     if lemmatized_ing in embedding:
         return FoodCategory(embedding[lemmatized_ing]).name
@@ -198,4 +204,6 @@ def get_recipe_tags(ingredients):
     tags = [get_ingredient_class(ingredient) for ingredient in ingredients]
     if None in tags:
         tags.remove(None)
+    if len(tags) >= 2 and FoodCategory.condiment.name in tags:
+        tags.remove(FoodCategory.condiment.name)
     return list(set(tags)) if len(tags) else tags
