@@ -1,3 +1,8 @@
+"""
+Module containg all the main methods of the package. 
+"""
+
+
 import io
 import pkgutil
 import re

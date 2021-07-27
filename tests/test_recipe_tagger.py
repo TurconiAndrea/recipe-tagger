@@ -1,3 +1,7 @@
+"""
+Module containg all the tests provided for the package. 
+"""
+
 import pytest
 
 from recipe_tagger import recipe_tagger
@@ -41,7 +45,7 @@ def test_add_ingredient():
     Test for add_ingredient method.
     Test is passed only if the provided ingredient is not into the embedding.
     """
-    assert recipe_tagger.add_ingredient("milk", "dairy") == True
+    assert recipe_tagger.add_ingredient("milk", "dairy") == False
 
 
 # @pytest.mark.skip()
@@ -82,6 +86,8 @@ def test_get_ingredient_class():
     assert recipe_tagger.get_ingredient_class("chicken") == "meat"
     assert recipe_tagger.get_ingredient_class("cattle") == "meat"
     assert recipe_tagger.get_ingredient_class("milk") == "dairy"
+    assert recipe_tagger.get_ingredient_class("porcini") == "mushroom"
+    assert recipe_tagger.get_ingredient_class("chips") == "snack"
 
 
 # @pytest.mark.skip()

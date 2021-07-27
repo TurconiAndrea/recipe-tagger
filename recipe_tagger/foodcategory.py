@@ -1,3 +1,9 @@
+"""
+Module containg all the necessary class for the package.
+FoodCategory is a Enum class representing the category of ingredient.
+CategorySynset is a class representing the wordnet synset of a category.
+"""
+
 from enum import Enum
 
 from nltk.corpus import wordnet
@@ -18,7 +24,8 @@ class FoodCategory(Enum):
     condiment = 7
     nut = 8
     seafood = 9
-    dessert = 10
+    snack = 10
+    mushroom = 11
 
 
 class CategorySynset:
@@ -42,4 +49,6 @@ class CategorySynset:
         wordnet.synset(f"{FoodCategory.condiment.name}.n.01"),
         wordnet.synset(f"{FoodCategory.nut.name}.n.01"),
         wordnet.synset(f"{FoodCategory.seafood.name}.n.01"),
+        wordnet.synset(f"{FoodCategory.snack.name}.n.01"),
+        wordnet.synset(f"{FoodCategory.mushroom.name}.n.01"),
     ]
