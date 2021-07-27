@@ -15,7 +15,8 @@ An ingredient could be classified in one of the following class:
 - Condiment
 - Nut
 - Seafood
-- Dessert
+- Snack
+- Mushroom
 
 A recipe is tagged based on its ingredients class. 
 The library also provides a function to get the class percentage of recipe ingredients. 
@@ -58,5 +59,5 @@ recipe_tagger.get_recipe_class_percentage(['aubergine', 'chicken', 'beef'])
 - [x] Better search over dictionary and Wikipedia pages of ingredient. 
 - [ ] Possibility to add ingredient after search if it is not present. 
 - [ ] Remove punctuation in provided ingrediets.
-- [ ] Remove condiment if there are any other classes.
-- [ ] Better search if the provided ingredient is composed by 2 words.
+- [ ] Remove condiment if there are any other classes.
+- [x] Better search if the provided ingredient is composed by 2 words.
