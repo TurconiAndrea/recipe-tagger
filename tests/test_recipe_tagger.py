@@ -109,6 +109,7 @@ def test_get_recipe_tags():
     Test is passed only if the provided recipe is classified correctly.
     This means that all the ingredients of the recipe must be classified correctly.
     """
+    assert recipe_tagger.get_recipe_tags(["Charcoal"]) == ["vegetable"]
     assert recipe_tagger.get_recipe_tags(["aubergine"]) == ["vegetable"]
     assert recipe_tagger.get_recipe_tags(["olive oil", "chicken"]) == ["meat"]
     assert "fruit" in recipe_tagger.get_recipe_tags(["pear", "apple", "aubergine"])

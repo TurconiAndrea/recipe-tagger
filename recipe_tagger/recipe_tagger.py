@@ -134,11 +134,11 @@ def search_ingredient_hypernyms(ingredient):
     best_sim = sim.index(max(sim))
     best_hyp = hypernym_sim.index(max(hypernym_sim)) if hypernym else None
 
-    if hypernym or best_sim == best_hyp:
+    if not hypernym or best_sim == best_hyp:
         return FoodCategory(best_sim).name
     else:
         sum = [(x + y) / 2 for x, y in zip(sim, hypernym_sim)]
-        return FoodCategory(sum.index(max(sum)))
+        return FoodCategory(sum.index(max(sum))).name
 
 
 def search_ingredient_class(ingredient):
