@@ -132,8 +132,7 @@ def search_ingredient_hypernyms(ingredient):
             hypernym_sim.append(hypernym.wup_similarity(cat))
 
     best_sim = sim.index(max(sim))
-    if hypernym:
-        best_hyp = hypernym_sim.index(max(hypernym_sim))
+    best_hyp = hypernym_sim.index(max(hypernym_sim)) if hypernym else None
 
     if hypernym or best_sim == best_hyp:
         return FoodCategory(best_sim).name

@@ -16,14 +16,14 @@ README = (HERE / "README.md").read_text()
 setup(
     name="recipe-tagger",
     packages=find_packages(include=["recipe_tagger"]),
-    version="0.3.9",
+    version="0.3.10",
     description="A library for tagging and classify recipes",
     author="Andrea Turconi",
     license="MIT",
     long_description=README,
     long_description_content_type="text/markdown",
     url="https://github.com/TurconiAndrea/recipe-tagger",
-    download_url="https://github.com/TurconiAndrea/recipe-tagger/archive/refs/tags/0.3.9.tar.gz",
+    download_url="https://github.com/TurconiAndrea/recipe-tagger/archive/refs/tags/0.3.10.tar.gz",
     keywords=["food", "recipe", "tag", "tagging", "ingredient"],
     install_requires=[
         "wikipedia-api",
