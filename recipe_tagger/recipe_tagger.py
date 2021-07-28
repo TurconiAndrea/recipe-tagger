@@ -32,6 +32,12 @@ def __get_embedding():
 
 
 def __remove_punctuation(word):
+    """
+    Format the provided word to mantain only the clean word.
+
+    :param word: the provided word to be cleaned.
+    :return: the word cleaned.
+    """
     word = word.strip()
     return re.sub(r"[^\w\s]", "", word)
 
@@ -110,7 +116,11 @@ def search_ingredient_hypernyms(ingredient):
     if " " in ingredient:
         ingredient = ingredient.split(" ")[-1]
 
-    ingredient = wordnet.synsets(ingredient)[0]
+    synsets = wordnet.synsets(ingredient)
+    if not synsets:
+        return
+
+    ingredient = synsets[0]
     hypernym = ingredient.hypernyms()[0]
     categories = CategorySynset.categories
 
