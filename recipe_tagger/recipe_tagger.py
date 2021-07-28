@@ -159,7 +159,11 @@ def search_ingredient_class(ingredient):
     wiki = wikipediaapi.Wikipedia("en")
 
     page = wiki.page(ingredient)
-    meaning = dictionary.meaning(ingredient)["Noun"]
+    meaning = (
+        dictionary.meaning(ingredient)["Noun"]
+        if dictionary.meaning(ingredient)
+        else None
+    )
     ontology = ", ".join(meaning) if meaning else ""
 
     categories = []
