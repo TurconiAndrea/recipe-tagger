@@ -121,19 +121,21 @@ def search_ingredient_hypernyms(ingredient):
         return
 
     ingredient = synsets[0]
-    hypernym = ingredient.hypernyms()[0]
+    hypernym = ingredient.hypernyms()[0] if ingredient.hypernyms() else None
     categories = CategorySynset.categories
 
     sim = []
     hypernym_sim = []
     for cat in categories:
         sim.append(ingredient.wup_similarity(cat))
-        hypernym_sim.append(hypernym.wup_similarity(cat))
+        if hypernym:
+            hypernym_sim.append(hypernym.wup_similarity(cat))
 
     best_sim = sim.index(max(sim))
-    best_hyp = hypernym_sim.index(max(hypernym_sim))
+    if hypernym:
+        best_hyp = hypernym_sim.index(max(hypernym_sim))
 
-    if best_sim == best_hyp:
+    if hypernym or best_sim == best_hyp:
         return FoodCategory(best_sim).name
     else:
         sum = [(x + y) / 2 for x, y in zip(sim, hypernym_sim)]
