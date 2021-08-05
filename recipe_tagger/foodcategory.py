@@ -26,6 +26,8 @@ class FoodCategory(Enum):
     seafood = 9
     snack = 10
     mushroom = 11
+    dessert = 12
+    beverage = 13
 
 
 class CategorySynset:
@@ -51,4 +53,6 @@ class CategorySynset:
         wordnet.synset(f"{FoodCategory.seafood.name}.n.01"),
         wordnet.synset(f"{FoodCategory.snack.name}.n.01"),
         wordnet.synset(f"{FoodCategory.mushroom.name}.n.01"),
+        wordnet.synset(f"{FoodCategory.dessert.name}.n.01"),
+        wordnet.synset(f"{FoodCategory.beverage.name}.n.01"),
     ]

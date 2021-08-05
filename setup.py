@@ -33,6 +33,7 @@ setup(
         "unidecode",
         "numpy",
         "nltk",
+        "stop-words",
     ],
     test_suite="tests",
     package_data={"": ["data/*.npy"]},
