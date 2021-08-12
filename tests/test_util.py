@@ -7,7 +7,7 @@ import pytest
 from recipe_tagger import util
 
 
-# @pytest.mark.skip()
+@pytest.mark.skip()
 def test_process_ingredient():
     """
     Test for process_ingredient method.

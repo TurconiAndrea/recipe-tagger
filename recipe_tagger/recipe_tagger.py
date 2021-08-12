@@ -3,55 +3,21 @@ Module containg all the main methods of the package.
 """
 
 
-import io
-import pkgutil
 import re
 from collections import Counter
 
-import numpy as np
 import wikipediaapi
-from nltk import tag
 from nltk.corpus import wordnet
 from PyDictionary import PyDictionary
 from pyfood.utils import Shelf
 from textblob import Word
 
+from recipe_tagger import util
+
 from .foodcategory import CategorySynset, FoodCategory
+from .util import get_embedding, process_ingredients
 
 embedding_path = "data/ingredient_embedding.npy"
-
-
-def __get_embedding():
-    """
-    Get the dataset of ingredients as a dictionary.
-
-    :return: a dictionary representing the embedding
-    """
-    embedding_io = io.BytesIO(pkgutil.get_data(__name__, embedding_path))
-    return np.load(embedding_io, allow_pickle=True).item()
-
-
-def __remove_punctuation(word):
-    """
-    Format the provided word to mantain only the clean word.
-
-    :param word: the provided word to be cleaned.
-    :return: the word cleaned.
-    """
-    word = word.strip()
-    return re.sub(r"[^\w\s]", "", word)
-
-
-def lemmatize_word(word):
-    """
-    Lemmatize the provided word.
-    Lemmatization is the process of converting a word to its base form.
-
-    :param word: the word to be lemmatized.
-    :return: the word lemmatized.
-    """
-    w = Word(word)
-    return w.lemmatize()
 
 
 def is_ingredient_vegan(ingredient):
@@ -91,7 +57,7 @@ def add_ingredient(ingredient, tag):
     :param tag: the class of the ingredient. Must be one of the listed above.
     :return: a bool indicating if the operation has succeded or not.
     """
-    embedding = __get_embedding()
+    embedding = get_embedding(embedding_path)
     ingredient = ingredient.strip()
     tag = tag.strip()
     if ingredient in embedding:
@@ -141,7 +107,7 @@ def search_ingredient_hypernyms(ingredient):
         return FoodCategory(sum.index(max(sum))).name
 
 
-def search_ingredient_class(ingredient):
+def search_ingredient_class(ingredient, language="en"):
     """
     Search on wikipedia and english dictionary the class of
     the provided ingredient.
@@ -155,7 +121,7 @@ def search_ingredient_class(ingredient):
         ingredient = ingredient.split(" ")[-1]
 
     dictionary = PyDictionary()
-    wiki = wikipediaapi.Wikipedia("en")
+    wiki = wikipediaapi.Wikipedia(language)
 
     page = wiki.page(ingredient)
     meaning = (
@@ -174,27 +140,27 @@ def search_ingredient_class(ingredient):
     return max(categories, key=categories.count) if len(categories) else None
 
 
-def get_ingredient_class(ingredient):
+def get_ingredient_class(ingredient, language="en"):
     """
     Predict the class of the provided ingredient based on the embeddings.
     If the ingredient cannot be found in the dictionary it will be
     searched on wikipedia pages or hypernyms.
 
     :param ingredient: the name of the ingredient.
+    :param language: the language of the ingredient.
     :return: the class of the ingredient.
     """
-    embedding = __get_embedding()
-    ingredient = __remove_punctuation(ingredient)
-    lemmatized_ing = lemmatize_word(ingredient)
-    if lemmatized_ing in embedding:
-        return FoodCategory(embedding[lemmatized_ing]).name
+    embedding = get_embedding(embedding_path)
+    cleaned_ing = process_ingredients(ingredient, language=language)
+    if cleaned_ing in embedding:
+        return FoodCategory(embedding[cleaned_ing]).name
     else:
-        web_class = search_ingredient_class(ingredient)
-        hyp_class = search_ingredient_hypernyms(lemmatized_ing)
+        web_class = search_ingredient_class(ingredient, language)
+        hyp_class = search_ingredient_hypernyms(cleaned_ing)
         return web_class if web_class else hyp_class
 
 
-def get_recipe_class_percentage(ingredients):
+def get_recipe_class_percentage(ingredients, language="en"):
     """
     Classify a recipe in tags based on its ingredient.
     Returns the percentages of ingredient class in the recipe provided.
@@ -202,12 +168,12 @@ def get_recipe_class_percentage(ingredients):
     :param ingredients: list of ingredients in the recipe.
     :return: list of tuples containg classes and percentages.
     """
-    tags = [get_ingredient_class(ingredient) for ingredient in ingredients]
+    tags = [get_ingredient_class(ingredient, language) for ingredient in ingredients]
     c = Counter(tags)
     return [(i, str(round(c[i] / len(tags) * 100.0, 2)) + "%") for i in c]
 
 
-def get_recipe_tags(ingredients):
+def get_recipe_tags(ingredients, language="en"):
     """
     Classify a recipe in tags based on its ingredient.
     Tag could be: Vegetable, Fruit, Meat, Legume, Diary,
@@ -216,7 +182,7 @@ def get_recipe_tags(ingredients):
     :param ingredients: list of ingredients in the recipe.
     :return: set of tags for the recipe.
     """
-    tags = [get_ingredient_class(ingredient) for ingredient in ingredients]
+    tags = [get_ingredient_class(ingredient, language) for ingredient in ingredients]
     if None in tags:
         tags.remove(None)
     if len(tags) >= 2 and FoodCategory.condiment.name in tags:

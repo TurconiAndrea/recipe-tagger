@@ -1,9 +1,11 @@
 """
 Module containing all the support method of the package.
 """
-
+import io
+import pkgutil
 import re
 
+import numpy as np
 from stop_words import get_stop_words
 from textblob import Word
 
@@ -864,11 +866,11 @@ __categories = {
 
 __adjectives_pattern = {
     "it": "[a-zA-Z]*ata|[a-zA-Z]*ato",
-    "en": "[a-zA-Z]*ed|[a-zA-Z]*en",
+    "en": "[a-zA-Z]*ed",
 }
 
 
-def __get_stop_words(language="it"):
+def __get_stop_words(language="en"):
     """
     Get the stop words of a selected language plus a collection of non-ingredient
     words usually associated with food and ingredients.
@@ -900,7 +902,7 @@ def __strip_multiple_whitespaces(string):
     return re.sub(" +", " ", string)
 
 
-def __categorize_words(string, language="it"):
+def __categorize_words(string, language="en"):
     """
     Categorize a string if it contains one of the words in the
     categories dictionary based on the language. If the string
@@ -916,7 +918,7 @@ def __categorize_words(string, language="it"):
     return intersection[0] if intersection else string
 
 
-def __remove_stopwords(string, language="it"):
+def __remove_stopwords(string, language="en"):
     """
     Remove all the stopwords inside the provided string based on
     the provided language.
@@ -942,7 +944,7 @@ def __remove_punctuation(string):
     return re.sub("[!@#£$.()/-]", "", string)
 
 
-def __remove_adjectives(string, language="it"):
+def __remove_adjectives(string, language="en"):
     """
     Remove all the adjectives in a string: adjectives are words that
     indicate a characteristic of the ingredient.
@@ -955,7 +957,21 @@ def __remove_adjectives(string, language="it"):
     return re.sub(__adjectives_pattern[language], "", string)
 
 
-def process_ingredients(ing, language="it"):
+def __lemmatize_word(string, language="en"):
+    """
+    Lemmatize the provided string.
+    Lemmatization is the process of converting a word to its base form.
+    Lemmatization only works with english words.
+
+    :param string: the word to be lemmatized.
+    :return: the word lemmatized.
+    """
+    if language != "en":
+        return string
+    return Word(string).lemmatize()
+
+
+def process_ingredients(ing, language="en"):
     """
     Process all the ingredients string in order to retrieve only the word
     correspond to the single ingredients, without number, special charachters,
@@ -969,10 +985,21 @@ def process_ingredients(ing, language="it"):
         return None
     ing = ing.lower()
     ing = ing.replace('"', "")
+    ing = __categorize_words(ing, language)
     ing = __strip_numeric(ing)
     ing = __remove_punctuation(ing)
     ing = __remove_stopwords(ing, language)
     ing = __remove_adjectives(ing, language)
     ing = __strip_multiple_whitespaces(ing)
-    ing = __categorize_words(ing, language)
+    ing = __lemmatize_word(ing, language)
     return ing.strip()
+
+
+def get_embedding(path):
+    """
+    Get the dataset of ingredients as a dictionary.
+
+    :return: a dictionary representing the embedding
+    """
+    embedding_io = io.BytesIO(pkgutil.get_data(__name__, path))
+    return np.load(embedding_io, allow_pickle=True).item()
