@@ -3,6 +3,7 @@ Module containing all the methods in order to compute the water footprint of an 
 """
 
 import numpy as np
+from nltk.corpus.reader import toolbox
 
 from .foodcategory import FoodCategoryWaterFootprint
 from .recipe_tagger import get_ingredient_class
@@ -56,3 +57,20 @@ def get_ingredient_waterfootprint(ingredient, quantity, language="en"):
         else __get_default_waterfootprint(ingredient, language)
     )
     return __calculate_waterfootprint(ingredient_wf, quantity)
+
+
+def get_recipe_waterfootprint(ingredients, quantities, language="en"):
+    """
+
+    :param ingredients: a list containing all the ingredients of the recipe
+    :param quanities: a list containing all the quantiteis of the recipe ingredients
+    :param language: the language of the ingredients.
+    :return: an integer representing the water footprint of the recipe
+    """
+    # TODO: check on quantites if they are provided in gr
+    total_wf = 0
+    for i in range(len(ingredients)):
+        total_wf = total_wf + get_ingredient_waterfootprint(
+            ingredients[i], quantities[i], language
+        )
+    return total_wf

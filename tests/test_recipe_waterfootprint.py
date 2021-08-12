@@ -17,3 +17,17 @@ def test_get_ingredient_waterfootprint():
     assert wf.get_ingredient_waterfootprint("apple", 20, language="en") == 16.44
     assert wf.get_ingredient_waterfootprint("cucumber", 20, language="en") == 7.06
     assert wf.get_ingredient_waterfootprint("chicken", 20, language="en") == 86.5
+
+
+# @pytest.mark.skip()
+def test_get_recipe_waterfootprint():
+    """
+    Test for get_recipe_waterfootprint method.
+    Test if passed only if the calculated water footprint of the recipe is correct.
+    """
+    assert (
+        wf.get_recipe_waterfootprint(
+            ["tomato", "apple", "chicken"], [20, 20, 20], language="en"
+        )
+        == 107.22
+    )
