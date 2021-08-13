@@ -2,6 +2,8 @@
 Module containing all the methods in order to compute the water footprint of an ingredient or recipe. 
 """
 
+import re
+
 import numpy as np
 from nltk.corpus.reader import toolbox
 
@@ -24,7 +26,7 @@ def __calculate_waterfootprint(wf_ing, quantity):
     :param quantity: the quantity of the ingredient.
     :return: the water footprint calcuated on the quantity.
     """
-    return (wf_ing * quantity) / 1000
+    return round((wf_ing * quantity) / 1000, 2)
 
 
 def __get_default_waterfootprint(ingredient, language="en"):
@@ -52,6 +54,20 @@ def __get_embedding_trimmed(language="en"):
     values = [v for v in embedding.values()]
     trimmed = [ing[:-1] for ing in embedding.keys()]
     return {trimmed[i]: values[i] for i in range(len(embedding))}
+
+
+def __get_quantites_formatted(quantities):
+    """
+    Get the list of quantities well formatted in the same unit (gr).
+    :param quantities: the list containing quantites of the ingredients.
+    :return: a list with the quantites well formatted in gr.
+    """
+    units = {"ml": 0.001, "gr": 1.0, "kg": 1000.0, "l": 1000.0}
+    values_units = [re.findall(r"[A-Za-z]+|\d+", q) for q in quantities]
+    return [
+        float(v[0]) * units[v[1]] / units["gr"] if len(v) == 2 else float(v[0])
+        for v in values_units
+    ]
 
 
 def get_ingredient_waterfootprint(ingredient, quantity, language="en"):
@@ -91,10 +107,12 @@ def get_recipe_waterfootprint(ingredients, quantities, language="en"):
     :param language: the language of the ingredients.
     :return: an integer representing the water footprint of the recipe
     """
-    # TODO: check on quantites if they are provided in gr
+    quantities = __get_quantites_formatted(quantities)
+    print(quantities)
     total_wf = 0
     for i in range(len(ingredients)):
         total_wf = total_wf + get_ingredient_waterfootprint(
             ingredients[i], quantities[i], language
         )
-    return total_wf
+        print(get_ingredient_waterfootprint(ingredients[i], quantities[i], language))
+    return round(total_wf, 2)

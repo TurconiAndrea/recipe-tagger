@@ -27,7 +27,7 @@ def test_get_recipe_waterfootprint():
     """
     assert (
         wf.get_recipe_waterfootprint(
-            ["tomato", "apple", "chicken"], [20, 20, 20], language="en"
+            ["tomato", "apple", "chicken"], ["20gr", "5ml", "1l"], language="en"
         )
-        == 107.22
+        == 4329.28
     )
