@@ -9,7 +9,10 @@ from .foodcategory import FoodCategoryWaterFootprint
 from .recipe_tagger import get_ingredient_class
 from .util import get_embedding, process_ingredients
 
-waterfootprint_embedding_paths = {"en": "data/ingredient_waterfootprint_en.npy"}
+waterfootprint_embedding_paths = {
+    "en": "data/ingredient_waterfootprint_en.npy",
+    "it": "data/ingredient_waterfootprint_ita.npy",
+}
 
 
 def __calculate_waterfootprint(wf_ing, quantity):
@@ -37,6 +40,20 @@ def __get_default_waterfootprint(ingredient, language="en"):
     return FoodCategoryWaterFootprint[ing_class].value
 
 
+def __get_embedding_trimmed(language="en"):
+    """
+    Return the embedding of the ingredient without the last letter in order
+    to check singular and plurals for different language not singularized
+    with the method of the util file.
+    :param language: the language of the embedding.
+    :return: the embedding where each ingredient is trimmed.
+    """
+    embedding = get_embedding(waterfootprint_embedding_paths[language])
+    values = [v for v in embedding.values()]
+    trimmed = [ing[:-1] for ing in embedding.keys()]
+    return {trimmed[i]: values[i] for i in range(len(embedding))}
+
+
 def get_ingredient_waterfootprint(ingredient, quantity, language="en"):
     """
     Get the water footprint of the provided ingredient based on the quantity.
@@ -50,18 +67,25 @@ def get_ingredient_waterfootprint(ingredient, quantity, language="en"):
     :return: the water footprint of the provided ingredient.
     """
     wf_embedding = get_embedding(waterfootprint_embedding_paths[language])
+    wf_embedding_trimmed = __get_embedding_trimmed(language)
     ingredient = process_ingredients(ingredient, language=language)
-    ingredient_wf = (
-        int(wf_embedding[ingredient])
-        if ingredient in wf_embedding
-        else __get_default_waterfootprint(ingredient, language)
-    )
+
+    ingredient_wf = 0
+    if ingredient in wf_embedding:
+        ingredient_wf = int(wf_embedding[ingredient])
+    elif ingredient[:-1] in wf_embedding_trimmed:
+        ingredient_wf = int(wf_embedding_trimmed[ingredient])
+    else:
+        ingredient_wf = __get_default_waterfootprint(ingredient, language)
     return __calculate_waterfootprint(ingredient_wf, quantity)
 
 
 def get_recipe_waterfootprint(ingredients, quantities, language="en"):
     """
-
+    Get the water footprint of a recipe, providing the ingredients and the
+    quantities for each ingredient. Params ingredients and quantities must have
+    the same length. Quantites are strings containing the values and the unit
+    without spaces (10gr).
     :param ingredients: a list containing all the ingredients of the recipe
     :param quanities: a list containing all the quantiteis of the recipe ingredients
     :param language: the language of the ingredients.
