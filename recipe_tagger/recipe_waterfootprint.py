@@ -96,23 +96,27 @@ def get_ingredient_waterfootprint(ingredient, quantity, language="en"):
     return __calculate_waterfootprint(ingredient_wf, quantity)
 
 
-def get_recipe_waterfootprint(ingredients, quantities, language="en"):
+def get_recipe_waterfootprint(
+    ingredients, quantities, information=False, language="en"
+):
     """
     Get the water footprint of a recipe, providing the ingredients and the
     quantities for each ingredient. Params ingredients and quantities must have
     the same length. Quantites are strings containing the values and the unit
     without spaces (10gr).
-    :param ingredients: a list containing all the ingredients of the recipe
-    :param quanities: a list containing all the quantiteis of the recipe ingredients
+    :param ingredients: a list containing all the ingredients of the recipe.
+    :param quanities: a list containing all the quantities of the recipe ingredients.
+    :param information: a dictionary containing the ingredients and its water footprint.
     :param language: the language of the ingredients.
-    :return: an integer representing the water footprint of the recipe
+    :return: an integer representing the water footprint of the recipe and if information
+    param is setted to true, return also a dictionary with all ingredients and theirs
+    computed water footprints.
     """
     quantities = __get_quantites_formatted(quantities)
-    print(quantities)
     total_wf = 0
+    information_wf = {}
     for i in range(len(ingredients)):
-        total_wf = total_wf + get_ingredient_waterfootprint(
-            ingredients[i], quantities[i], language
-        )
-        print(get_ingredient_waterfootprint(ingredients[i], quantities[i], language))
-    return round(total_wf, 2)
+        ing_wf = get_ingredient_waterfootprint(ingredients[i], quantities[i], language)
+        information_wf[ingredients[i]] = ing_wf
+        total_wf = total_wf + ing_wf
+    return (round(total_wf, 2), information_wf) if information else round(total_wf, 2)
