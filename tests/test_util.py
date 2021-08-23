@@ -7,7 +7,7 @@ import pytest
 from recipe_tagger import util
 
 
-@pytest.mark.skip()
+# @pytest.mark.skip()
 def test_process_ingredient():
     """
     Test for process_ingredient method.
@@ -18,4 +18,4 @@ def test_process_ingredient():
         == "egg"
     )
     assert util.process_ingredients("frozen tomatoes", language="en") == "tomato"
-    assert util.process_ingredients("pomodori tagliati", language="it") == "pomodori"
+    assert util.process_ingredients("pomodori tagliati", language="it") == "pomodor"

@@ -191,4 +191,5 @@ def get_recipe_tags(ingredients, language="en"):
         tags.remove(None)
     if len(tags) >= 2 and FoodCategory.condiment.name in tags:
         tags.remove(FoodCategory.condiment.name)
+    print(tags)
     return list(set(tags)) if len(tags) else tags

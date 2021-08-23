@@ -29,7 +29,7 @@ def test_is_recipe_vegan():
     assert recipe_tagger.is_recipe_vegan(["apple", "pear"]) == True
 
 
-@pytest.mark.skip()
+# @pytest.mark.skip()
 def test_add_ingredient():
     """
     Test for add_ingredient method.
@@ -38,7 +38,7 @@ def test_add_ingredient():
     assert recipe_tagger.add_ingredient("milk", "dairy") == False
 
 
-#  @pytest.mark.skip()
+# @pytest.mark.skip()
 def test_search_ingredient_hypernyms():
     """
     Test for search_ingredient_hypernyms method.
@@ -115,4 +115,8 @@ def test_get_recipe_tags():
         for ing in recipe_tagger.get_recipe_tags(
             ["baked chicken", "apple", "crunchy pear"]
         )
+    )
+    assert all(
+        ing in ["meat", "vegetable"]
+        for ing in recipe_tagger.get_recipe_tags(["scamone", "carote"], language="it")
     )
