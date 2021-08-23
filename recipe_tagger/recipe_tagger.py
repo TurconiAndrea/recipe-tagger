@@ -17,7 +17,10 @@ from recipe_tagger import util
 from .foodcategory import CategorySynset, FoodCategory
 from .util import get_embedding, process_ingredients
 
-embedding_path = "data/ingredient_embedding.npy"
+food_embedding_paths = {
+    "en": "data/ingredient_embedding_en.npy",
+    "it": "data/ingredient_embedding_it.npy",
+}
 
 
 def is_ingredient_vegan(ingredient):
@@ -46,18 +49,19 @@ def is_recipe_vegan(ingredients):
     return results["labels"]["vegan"]
 
 
-def add_ingredient(ingredient, tag):
+def add_ingredient(ingredient, tag, language="en"):
     """
     Map the provided ingredient and the tag into the embedding dataset.
     Tag must be one the following FoodCategory:
     vegetable, fruit, meat, legume, diary, egg, staple,
-    condiment, nut, seafood, dessert
+    condiment, nut, seafood, dessert.
 
     :param ingredient: the name of the ingredient.
     :param tag: the class of the ingredient. Must be one of the listed above.
+    :param language: the language of the ingredient.
     :return: a bool indicating if the operation has succeded or not.
     """
-    embedding = get_embedding(embedding_path)
+    embedding = get_embedding(food_embedding_paths[language])
     ingredient = ingredient.strip()
     tag = tag.strip()
     if ingredient in embedding:
@@ -150,7 +154,7 @@ def get_ingredient_class(ingredient, language="en"):
     :param language: the language of the ingredient.
     :return: the class of the ingredient.
     """
-    embedding = get_embedding(embedding_path)
+    embedding = get_embedding(food_embedding_paths[language])
     cleaned_ing = process_ingredients(ingredient, language=language)
     if cleaned_ing in embedding:
         return FoodCategory(embedding[cleaned_ing]).name

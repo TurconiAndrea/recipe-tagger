@@ -15,6 +15,7 @@ def test_process_ingredient():
     """
     assert (
         util.process_ingredients("farm eggs without antibiotics", language="en")
-        == "eggs"
+        == "egg"
     )
-    assert util.process_ingredients("frozen tomatoes", language="en") == "tomatoes"
+    assert util.process_ingredients("frozen tomatoes", language="en") == "tomato"
+    assert util.process_ingredients("pomodori tagliati", language="it") == "pomodori"

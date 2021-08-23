@@ -6,6 +6,7 @@ import pkgutil
 import re
 
 import numpy as np
+from nltk.stem.snowball import SnowballStemmer
 from stop_words import get_stop_words
 from textblob import Word
 
@@ -355,6 +356,10 @@ __other_words = {
         "sottofesa",
         "secche",
         "semi",
+        "vivace",
+        "rio",
+        "qualità",
+        "gr",
     ],
     "en": [
         "crushed",
@@ -957,18 +962,23 @@ def __remove_adjectives(string, language="en"):
     return re.sub(__adjectives_pattern[language], "", string)
 
 
-def __lemmatize_word(string, language="en"):
+def __stem_word(string, language="en"):
     """
-    Lemmatize the provided string.
-    Lemmatization is the process of converting a word to its base form.
+    Produce the stemming of the provided string.
+    Stemming is the process of reducing the word to its word stem that
+    affixes to suffixes and prefixes or to roots of words known as a lemma.
     Lemmatization only works with english words.
 
     :param string: the word to be lemmatized.
+    :param language: the language of the word.
     :return: the word lemmatized.
     """
-    if language != "en":
-        return string
-    return Word(string).lemmatize()
+    lang = {
+        "en": "english",
+        "it": "italian",
+    }
+    stemmer = SnowballStemmer(language=lang[language])
+    return stemmer.stem(string)
 
 
 def process_ingredients(ing, language="en"):
@@ -991,7 +1001,7 @@ def process_ingredients(ing, language="en"):
     ing = __remove_stopwords(ing, language)
     ing = __remove_adjectives(ing, language)
     ing = __strip_multiple_whitespaces(ing)
-    ing = __lemmatize_word(ing, language)
+    ing = __stem_word(ing, language)
     return ing.strip()
 
 
