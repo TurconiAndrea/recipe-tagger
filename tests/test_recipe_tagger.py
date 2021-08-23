@@ -1,20 +1,10 @@
 """
-Module containg all the tests provided for the package. 
+Module containg all the tests provided for the recipe_tagger module. 
 """
 
 import pytest
 
 from recipe_tagger import recipe_tagger
-
-
-# @pytest.mark.skip()
-def test_lemmatize_word():
-    """
-    Test for lemmative_word method.
-    Test is passed only if the provided ingredient is lemattized correctly
-    """
-    assert recipe_tagger.lemmatize_word("aubergines") == "aubergine"
-    assert recipe_tagger.lemmatize_word("legumes") == "legume"
 
 
 # @pytest.mark.skip()
@@ -102,14 +92,13 @@ def test_get_recipe_class_percentage():
     ) == [("meat", "66.67%"), ("fruit", "33.33%")]
 
 
-# @pytest.mark.skip()
+#  @pytest.mark.skip()
 def test_get_recipe_tags():
     """
     Test for get_recipe_tags method.
     Test is passed only if the provided recipe is classified correctly.
     This means that all the ingredients of the recipe must be classified correctly.
     """
-    assert recipe_tagger.get_recipe_tags(["Charcoal"]) == ["vegetable"]
     assert recipe_tagger.get_recipe_tags(["aubergine"]) == ["vegetable"]
     assert recipe_tagger.get_recipe_tags(["olive oil", "chicken"]) == ["meat"]
     assert "fruit" in recipe_tagger.get_recipe_tags(["pear", "apple", "aubergine"])
@@ -126,4 +115,8 @@ def test_get_recipe_tags():
         for ing in recipe_tagger.get_recipe_tags(
             ["baked chicken", "apple", "crunchy pear"]
         )
+    )
+    assert all(
+        ing in ["meat", "vegetable"]
+        for ing in recipe_tagger.get_recipe_tags(["scamone", "carote"], language="it")
     )
