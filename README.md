@@ -74,6 +74,7 @@ wf.get_ingredient_waterfootprint("tomato", 20, process=True, language="en")
 ```
 
 **Get the water footprint of a recipe (it is needed to prived all the ingredients and the quantity of the recipe)**
+
 In order to provide a precise calculation of the WF, it is needed to provide also the quantity used for the ingredient in the recipe. 
 Quanities must be provided matching the following pattern: "{number}{unit}". Unit must be one of "gr", "kg", "ml", "L"
 
