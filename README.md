@@ -1,8 +1,9 @@
 # Recipe Tagger
 
-This package provides a classification and tagging system for ingredients and recipes. 
-The functioning of the package is based on a dataset containing more than 700 ingredients mapped with their own class. 
+This package provides a classification, a tagging system and a water footprint calculator for ingredients and recipes.  
+The functioning of the package is based on a dataset containing more than 700 ingredients mapped with their own class and water footprint. 
 If a provided ingredient is not mapped into the dataset, the library search for it on wikipedia pages, into the dictionary and into NLTK Wordnet to find the best possible class. 
+The water footprint is computed based on its ingredients. Every ingredient has a water footprint, measured in l/kg. 
 
 An ingredient could be classified in one of the following class: 
 - Vegetable
@@ -17,15 +18,18 @@ An ingredient could be classified in one of the following class:
 - Seafood
 - Snack
 - Mushroom
+- Dessert
+- Beverage
 
 A recipe is tagged based on its ingredients class. 
 The library also provides a function to get the class percentage of recipe ingredients. 
 
-### Installation
+## Installation
 
 ```
 pip install recipe_tagger
 ```
+## Recipe Tagger module 
 
 ### How to use
 
@@ -54,10 +58,47 @@ recipe_tagger.get_recipe_class_percentage(['aubergine', 'chicken', 'beef'])
 # [('vegetable', '33.33%'), ('meat', '66.67%')]
 ```
 
+## Recipe Water Footprint module
+
+### How to use
+
+```python
+from recipe_tagger import recipe_waterfootprint as wf
+```
+
+**Get the water footprint of a single ingredient**
+
+```python
+wf.get_ingredient_waterfootprint("tomato", 20, process=True, language="en")
+# 4.28
+```
+
+**Get the water footprint of a recipe (it is needed to prived all the ingredients and the quantity of the recipe)**
+In order to provide a precise calculation of the WF, it is needed to provide also the quantity used for the ingredient in the recipe. 
+Quanities must be provided matching the following pattern: "{number}{unit}". Unit must be one of "gr", "kg", "ml", "L"
+
+```python
+wf.get_recipe_waterfootprint(
+            ["tomato", "apple", "chicken"], 
+            ["20gr", "5ml", "1l"], 
+            language="en")
+# 4329.28
+```
+
+**Get the water footprint of a recipe and informations about the ingredients' wf
+```python
+wf.get_recipe_waterfootprint(
+            ["tomato", "apple", "chicken"],
+            ["20gr", "5ml", "1l"],
+            language="en",
+            information=True,
+        )
+# (4329.28, {"tomato": 4.28, "apple": 0.0, "chicken": 4325.0})
+```
+
+
 ### Todo
 - [x] Handling of Wikipedia pages.
-- [x] Better search over dictionary and Wikipedia pages of ingredient. 
-- [ ] Possibility to add ingredient after search if it is not present. 
-- [x] Remove punctuation in provided ingrediets.
-- [x] Remove condiment if there are any other classes.
-- [x] Better search if the provided ingredient is composed by 2 words.
+- [x] Better search over dictionary and Wikipedia pages of ingredient.
+- [x] Calculate the water foorprint of a recipe
+- [ ] A the possibility to add an ingredient after search if it is not present into the embedding.
