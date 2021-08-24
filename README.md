@@ -31,7 +31,7 @@ pip install recipe_tagger
 ```
 ## Recipe Tagger module 
 
-### How to use
+**How to use**
 
 ```python
 from recipe_tagger import recipe_tagger
@@ -60,7 +60,7 @@ recipe_tagger.get_recipe_class_percentage(['aubergine', 'chicken', 'beef'])
 
 ## Recipe Water Footprint module
 
-### How to use
+**How to use**
 
 ```python
 from recipe_tagger import recipe_waterfootprint as wf
