@@ -129,8 +129,8 @@ def search_ingredient_class(ingredient, language="en"):
 
     page = wiki.page(ingredient)
     meaning = (
-        dictionary.meaning(ingredient)["Noun"]
-        if dictionary.meaning(ingredient)
+        dictionary.meaning(ingredient, disable_errors=True)["Noun"]
+        if dictionary.meaning(ingredient, disable_errors=True)
         else None
     )
     ontology = ", ".join(meaning) if meaning else ""

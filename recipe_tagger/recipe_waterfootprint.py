@@ -4,9 +4,6 @@ Module containing all the methods in order to compute the water footprint of an 
 
 import re
 
-import numpy as np
-from nltk.corpus.reader import toolbox
-
 from .foodcategory import FoodCategoryWaterFootprint
 from .recipe_tagger import get_ingredient_class
 from .util import get_embedding, process_ingredients
@@ -90,12 +87,29 @@ def get_ingredient_waterfootprint(
     ingredient = (
         process_ingredients(ingredient, language=language) if process else ingredient
     )
-    ingredient_wf = (
-        int(wf_embedding[ingredient][0])
-        if ingredient in wf_embedding
-        else __get_default_waterfootprint(ingredient, language)
+    not_yet_calculated = True
+    ingredient_wf = 0
+    if ingredient in wf_embedding:
+        ingredient_wf = int(wf_embedding[ingredient][0])
+    elif " " in ingredient:
+        ings = [
+            process_ingredients(ing, language=language) for ing in ingredient.split()
+        ]
+        wfs = [
+            get_ingredient_waterfootprint(
+                ing, quantity / len(ings), language=language, embedding=embedding
+            )
+            for ing in ings
+        ]
+        ingredient_wf = sum(wfs)
+        not_yet_calculated = False
+    else:
+        ingredient_wf = __get_default_waterfootprint(ingredient, language=language)
+    return (
+        __calculate_waterfootprint(ingredient_wf, quantity)
+        if not_yet_calculated
+        else ingredient_wf
     )
-    return __calculate_waterfootprint(ingredient_wf, quantity)
 
 
 def get_recipe_waterfootprint(

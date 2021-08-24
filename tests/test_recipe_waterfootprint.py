@@ -80,3 +80,11 @@ def test_get_recipe_waterfootprint():
         )
         == 4329.28
     )
+    assert (
+        wf.get_recipe_waterfootprint(
+            ["scamone pistacchi mandorle", "olio", "sale"],
+            ["100gr", "5ml", "2gr"],
+            language="it",
+        )
+        == 1160.88
+    )
