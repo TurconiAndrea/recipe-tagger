@@ -13,7 +13,7 @@ from .util import get_embedding, process_ingredients
 
 waterfootprint_embedding_paths = {
     "en": "data/ingredient_waterfootprint_en.npy",
-    "it": "data/ingredient_waterfootprint_ita.npy",
+    "it": "data/ingredient_waterfootprint_it.npy",
 }
 
 
@@ -52,10 +52,6 @@ def __get_quantites_formatted(ingredients, quantities, language):
     embedding = get_embedding(waterfootprint_embedding_paths[language])
     units = {"ml": 0.001, "gr": 1.0, "kg": 1000.0, "L": 1000.0, "l": 1000.0}
     values_units = [re.findall(r"[A-Za-z]+|\d+", q) for q in quantities]
-    # return [
-    #    float(v[0]) * units[v[1]] / units["gr"] if len(v) == 2 else float(v[0])
-    #    for v in values_units
-    # ]
     quantities = []
     for i in range(len(values_units)):
         value_unit = values_units[i]
@@ -70,7 +66,9 @@ def __get_quantites_formatted(ingredients, quantities, language):
     return quantities
 
 
-def get_ingredient_waterfootprint(ingredient, quantity, process=False, language="en"):
+def get_ingredient_waterfootprint(
+    ingredient, quantity, embedding=None, process=False, language="en"
+):
     """
     Get the water footprint of the provided ingredient based on the quantity.
     If the ingredient is not found in the embedding, the recipe tagger module is
@@ -79,11 +77,16 @@ def get_ingredient_waterfootprint(ingredient, quantity, process=False, language=
 
     :param ingredient: the name of the ingredient.
     :param quantity: the quantity of ingredient to calculate water footprint. (in gr)
+    :param embedding: the water footprint embedding.
     :param process: a bool indicating if the provided ingredient must be processed.
     :param language: the language of the ingredient.
     :return: the water footprint of the provided ingredient.
     """
-    wf_embedding = get_embedding(waterfootprint_embedding_paths[language])
+    wf_embedding = (
+        get_embedding(waterfootprint_embedding_paths[language])
+        if not embedding
+        else embedding
+    )
     ingredient = (
         process_ingredients(ingredient, language=language) if process else ingredient
     )
@@ -111,13 +114,19 @@ def get_recipe_waterfootprint(
     param is setted to true, return also a dictionary with all ingredients and theirs
     computed water footprints.
     """
-    proc_ingredients = [process_ingredients(ing) for ing in ingredients]
+    wf_embedding = get_embedding(waterfootprint_embedding_paths[language])
+    proc_ingredients = [
+        process_ingredients(ing, language=language) for ing in ingredients
+    ]
     quantities = __get_quantites_formatted(proc_ingredients, quantities, language)
     total_wf = 0
     information_wf = {}
     for i in range(len(ingredients)):
         ing_wf = get_ingredient_waterfootprint(
-            proc_ingredients[i], quantities[i], language
+            proc_ingredients[i],
+            quantities[i],
+            embedding=wf_embedding,
+            language=language,
         )
         information_wf[ingredients[i]] = ing_wf
         total_wf = round(total_wf + ing_wf, 2)

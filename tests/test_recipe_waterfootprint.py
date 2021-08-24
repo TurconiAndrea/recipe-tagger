@@ -29,6 +29,10 @@ def test_get_ingredient_waterfootprint():
         wf.get_ingredient_waterfootprint("chicken", 20, process=True, language="en")
         == 86.5
     )
+    assert (
+        wf.get_ingredient_waterfootprint("ombrina", 20, process=True, language="it")
+        == 51.8
+    )
 
 
 # @pytest.mark.skip()
@@ -69,4 +73,10 @@ def test_get_recipe_waterfootprint():
             information=True,
         )
         == (4658.08, {"tomato": 4.28, "apple": 328.8, "chicken": 4325.0, "mango": 0.0})
+    )
+    assert (
+        wf.get_recipe_waterfootprint(
+            ["pomodori", "mela", "pollo"], ["20gr", "5ml", "1l"], language="it"
+        )
+        == 4329.28
     )
