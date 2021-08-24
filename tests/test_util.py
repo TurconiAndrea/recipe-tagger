@@ -19,3 +19,6 @@ def test_process_ingredient():
     )
     assert util.process_ingredients("frozen tomatoes", language="en") == "tomato"
     assert util.process_ingredients("pomodori tagliati", language="it") == "pomodor"
+    assert (
+        util.process_ingredients("Insalata milano tagliata", language="it") == "insal"
+    )

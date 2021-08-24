@@ -54,8 +54,10 @@ def __get_quantites_formatted(ingredients, quantities, language):
         value_unit = values_units[i]
         if len(value_unit) != 2:
             quantities.append(float(value_unit[0]))
-        elif value_unit[1] == "unit":
+        elif value_unit[1] == "unit" and ingredients[i] in embedding:
             quantities.append(float(value_unit[0]) * embedding[ingredients[i]][1])
+        elif value_unit[1] == "unit" and ingredients[i] not in embedding:
+            quantities.append(500.0)
         elif value_unit[1] == "None":
             quantities.append(0.0)
         else:
@@ -79,6 +81,9 @@ def get_ingredient_waterfootprint(
     :param language: the language of the ingredient.
     :return: the water footprint of the provided ingredient.
     """
+    if not ingredient:
+        return 0.0
+
     wf_embedding = (
         get_embedding(waterfootprint_embedding_paths[language])
         if not embedding

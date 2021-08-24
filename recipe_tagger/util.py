@@ -217,7 +217,6 @@ __other_words = {
         "vigna",
         "poggio",
         "anna",
-        "te",
         "crudo",
         "silano",
         "alta",
@@ -360,6 +359,7 @@ __other_words = {
         "rio",
         "qualità",
         "gr",
+        "lessi",
     ],
     "en": [
         "crushed",
@@ -671,7 +671,7 @@ __other_words = {
         "brut",
         "beyond",
         "method",
-        "docg",
+        "doc",
         "blanc",
         "de",
         "noir",
@@ -824,6 +824,7 @@ __other_words = {
         "underside",
         "dry",
         "seeds",
+        "boiled",
     ],
 }
 
@@ -846,6 +847,8 @@ __categories = {
         "colomba",
         "pizza",
         "riso",
+        "te",
+        "insalata",
     ],
     "en": [
         "ice cream",
@@ -865,6 +868,8 @@ __categories = {
         "dove",
         "pizza",
         "rice",
+        "tea",
+        "salad",
     ],
 }
 
@@ -915,12 +920,13 @@ def __categorize_words(string, language="en"):
 
     :param string: the string that can be categorized.
     :param language: the language of the ingredient and category.
-    :return: a categorized string or the same string
+    :return: a categorized string or the same string and a boolean to
+    state if the string has been categorized or not.
     """
     category = __categories[language]
     word_list = string.split()
     intersection = list(set(word_list) & set(category))
-    return intersection[0] if intersection else string
+    return (intersection[0], True) if intersection else (string, False)
 
 
 def __remove_stopwords(string, language="en"):
@@ -995,12 +1001,13 @@ def process_ingredients(ing, language="en"):
         return None
     ing = ing.lower()
     ing = ing.replace('"', "")
-    ing = __categorize_words(ing, language)
-    ing = __strip_numeric(ing)
-    ing = __remove_punctuation(ing)
-    ing = __remove_stopwords(ing, language)
-    ing = __remove_adjectives(ing, language)
-    ing = __strip_multiple_whitespaces(ing)
+    ing, boo = __categorize_words(ing, language)
+    if not boo:
+        ing = __strip_numeric(ing)
+        ing = __remove_punctuation(ing)
+        ing = __remove_stopwords(ing, language)
+        ing = __remove_adjectives(ing, language)
+        ing = __strip_multiple_whitespaces(ing)
     ing = __stem_word(ing, language)
     return ing.strip()
 
