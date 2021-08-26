@@ -30,7 +30,7 @@ def test_get_ingredient_waterfootprint():
         == 86.5
     )
     assert (
-        wf.get_ingredient_waterfootprint("ombrina", 20, process=True, language="it")
+        wf.get_ingredient_waterfootprint("gambero", 20, process=True, language="it")
         == 51.8
     )
 

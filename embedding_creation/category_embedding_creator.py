@@ -166,7 +166,6 @@ if __name__ == "__main__":
         help="-t: Choose the type of the embedding (foodcategory or waterfootprint or all)",
     )
     arguments = parser.parse_args()
-    print(arguments)
     type = arguments.type if arguments.type else FOODCATEGORY
     language = arguments.language if arguments.language else ENGLISH
 
