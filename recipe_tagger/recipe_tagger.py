@@ -158,6 +158,11 @@ def get_ingredient_class(ingredient, language="en"):
     cleaned_ing = process_ingredients(ingredient, language=language)
     if cleaned_ing in embedding:
         return FoodCategory(embedding[cleaned_ing]).name
+    elif " " in cleaned_ing:
+        ings = [ing for ing in cleaned_ing.split()]
+        classes = [get_ingredient_class(ing, language=language) for ing in ings]
+        classes = [cl for cl in classes if cl]
+        return classes[0] if classes else None
     else:
         web_class = search_ingredient_class(ingredient, language)
         hyp_class = search_ingredient_hypernyms(cleaned_ing)
