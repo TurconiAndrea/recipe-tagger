@@ -358,7 +358,6 @@ __other_words = {
         "vivace",
         "rio",
         "qualità",
-        "gr",
         "lessi",
     ],
     "en": [
@@ -378,6 +377,7 @@ __other_words = {
         "pint",
         "quart",
         "gallon",
+        "gr",
         "ml",
         "l",
         "dl",
@@ -849,6 +849,11 @@ __categories = {
         "riso",
         "te",
         "insalata",
+        "carne",
+        "verdure",
+        "cioccolato",
+        "funghi",
+        "fungo",
     ],
     "en": [
         "ice cream",
@@ -870,12 +875,16 @@ __categories = {
         "rice",
         "tea",
         "salad",
+        "meat",
+        "vegetable",
+        "chocolate",
+        "mushroom",
     ],
 }
 
 
 __adjectives_pattern = {
-    "it": "[a-zA-Z]*ata|[a-zA-Z]*ato",
+    "it": "[a-zA-Z]*ato",
     "en": "[a-zA-Z]*ed",
 }
 

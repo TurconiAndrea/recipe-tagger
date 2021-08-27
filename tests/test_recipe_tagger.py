@@ -78,6 +78,7 @@ def test_get_ingredient_class():
     assert recipe_tagger.get_ingredient_class("milk") == "dairy"
     assert recipe_tagger.get_ingredient_class("porcini") == "mushroom"
     assert recipe_tagger.get_ingredient_class("chips") == "snack"
+    assert recipe_tagger.get_ingredient_class("orata", "it") == "seafood"
 
 
 # @pytest.mark.skip()

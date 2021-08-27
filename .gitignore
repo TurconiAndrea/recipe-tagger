@@ -2,6 +2,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,virtualenv,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,visualstudiocode,virtualenv,macos
 
+### Project ignore ###
+embedding_creation/data
+
 ### macOS ###
 # General
 .DS_Store
