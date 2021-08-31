@@ -61,7 +61,7 @@ def __get_quantites_formatted(ingredients, quantities, language):
         elif value_unit[1] == "None":
             quantities.append(0.0)
         else:
-            quantities.append(float(value_unit[0]) * units[value_unit[1]] / units["gr"])
+            quantities.append(float(value_unit[0]) * units[value_unit[1]])
     return quantities
 
 
