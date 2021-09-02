@@ -850,6 +850,7 @@ __categories = {
         "cioccolato",
         "funghi",
         "fungo",
+        "tonnato",
     ],
     "en": [
         "ice cream",
@@ -875,6 +876,7 @@ __categories = {
         "vegetable",
         "chocolate",
         "mushroom",
+        "veal",
     ],
 }
 
