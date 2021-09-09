@@ -47,7 +47,7 @@ def __get_quantites_formatted(ingredients, quantities, language):
     :return: a list with the quantites well formatted in gr.
     """
     embedding = get_embedding(waterfootprint_embedding_paths[language])
-    units = {"ml": 0.001, "gr": 1.0, "kg": 1000.0, "L": 1000.0, "l": 1000.0}
+    units = {"ml": 1, "gr": 1.0, "kg": 1000.0, "L": 1000.0, "l": 1000.0}
     values_units = [re.findall(r"[A-Za-z]+|\d+", q) for q in quantities]
     quantities = []
     for i in range(len(values_units)):
