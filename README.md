@@ -76,7 +76,7 @@ wf.get_ingredient_waterfootprint("tomato", 20, process=True, language="en")
 **Get the water footprint of a recipe (it is needed to prived all the ingredients and the quantity of the recipe)**
 
 In order to provide a precise calculation of the WF, it is needed to provide also the quantity used for the ingredient in the recipe. 
-Quanities must be provided matching the following pattern: "{number}{unit}". Unit must be one of "gr", "kg", "ml", "L"
+Quanities must be provided matching the following pattern: "{number}{unit}". Unit must be one of "gr", "kg", "ml", "L", "unit".
 
 ```python
 wf.get_recipe_waterfootprint(
@@ -86,7 +86,7 @@ wf.get_recipe_waterfootprint(
 # 4329.28
 ```
 
-**Get the water footprint of a recipe and informations about the ingredients' wf
+**Get the water footprint of a recipe and informations about the ingredients water footprint**
 ```python
 wf.get_recipe_waterfootprint(
             ["tomato", "apple", "chicken"],
@@ -98,8 +98,17 @@ wf.get_recipe_waterfootprint(
 ```
 
 
-### Todo
+## Language support
+Every method of the package provide the language support. Use the "language" parameter along with the abbreviation of a supported language. 
+Default language is English, if the "language" argument is not provided. 
+
+- English ("en")
+- Italian ("it")
+
+
+## Todo
 - [x] Handling of Wikipedia pages.
 - [x] Better search over dictionary and Wikipedia pages of ingredient.
 - [x] Calculate the water foorprint of a recipe
 - [ ] A the possibility to add an ingredient after search if it is not present into the embedding.
+- [ ] An explanation in order to provided an other language. 
