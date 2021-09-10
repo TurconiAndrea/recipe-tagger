@@ -47,11 +47,35 @@ def __get_quantites_formatted(ingredients, quantities, language):
     :return: a list with the quantites well formatted in gr.
     """
     embedding = get_embedding(waterfootprint_embedding_paths[language])
-    units = {"ml": 1, "gr": 1.0, "kg": 1000.0, "L": 1000.0, "l": 1000.0}
+    units = {
+        "ml": 1.0,
+        "gr": 1.0,
+        "KG": 1000.0,
+        "kg": 1000.0,
+        "L": 1000.0,
+        "l": 1000.0,
+        "ounce": 28.0,
+        "ounces": 28.0,
+        "teaspoon": 5.0,
+        "tablespoon": 15.0,
+        "cup": 237.0,
+        "cups": 237.0,
+        "pint": 473.0,
+        "quart": 946.0,
+        "gallon": 3800.0,
+        "gallons": 3800.0,
+        "pound": 454.0,
+    }
     values_units = [re.findall(r"[A-Za-z]+|\d+", q) for q in quantities]
     quantities = []
     for i in range(len(values_units)):
         value_unit = values_units[i]
+        if len(value_unit) == 3:
+            value_unit = (
+                [int(value_unit[0]) / int(value_unit[1]), value_unit[2]]
+                if int(value_unit[0]) != 0
+                else [float(f"{value_unit[0]}.{value_unit[1]}"), value_unit[2]]
+            )
         if len(value_unit) != 2:
             quantities.append(float(value_unit[0]))
         elif value_unit[1] == "unit" and ingredients[i] in embedding:
@@ -110,6 +134,8 @@ def get_ingredient_waterfootprint(
         not_yet_calculated = False
     else:
         ingredient_wf = __get_default_waterfootprint(ingredient, language=language)
+    print(ingredient_wf)
+    print(quantity)
     return (
         __calculate_waterfootprint(ingredient_wf, quantity)
         if not_yet_calculated
@@ -138,6 +164,8 @@ def get_recipe_waterfootprint(
         process_ingredients(ing, language=language) for ing in ingredients
     ]
     quantities = __get_quantites_formatted(proc_ingredients, quantities, language)
+    print(proc_ingredients)
+    print(quantities)
     total_wf = 0
     information_wf = {}
     for i in range(len(ingredients)):
@@ -149,4 +177,5 @@ def get_recipe_waterfootprint(
         )
         information_wf[ingredients[i]] = ing_wf
         total_wf = round(total_wf + ing_wf, 2)
+        print(ingredients[i], ":", ing_wf)
     return (total_wf, information_wf) if information else total_wf
