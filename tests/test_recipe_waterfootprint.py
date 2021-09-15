@@ -45,7 +45,7 @@ def test_get_recipe_waterfootprint():
         wf.get_recipe_waterfootprint(
             ["tomato", "apple", "chicken"], ["20gr", "5ml", "1l"], language="en"
         )
-        == 4329.28
+        == 4333.39
     )
     assert (
         wf.get_recipe_waterfootprint(
@@ -54,7 +54,7 @@ def test_get_recipe_waterfootprint():
             language="en",
             information=True,
         )
-        == (4329.28, {"tomato": 4.28, "apple": 0.0, "chicken": 4325.0})
+        == (4333.39, {"tomato": 4.28, "apple": 4.11, "chicken": 4325.0})
     )
     assert (
         wf.get_recipe_waterfootprint(
@@ -78,7 +78,7 @@ def test_get_recipe_waterfootprint():
         wf.get_recipe_waterfootprint(
             ["pomodori", "mela", "pollo"], ["20gr", "5ml", "1l"], language="it"
         )
-        == 4329.28
+        == 4333.39
     )
     assert (
         wf.get_recipe_waterfootprint(
@@ -86,5 +86,5 @@ def test_get_recipe_waterfootprint():
             ["100gr", "5ml", "2gr"],
             language="it",
         )
-        == 1160.88
+        == 1209.08
     )
