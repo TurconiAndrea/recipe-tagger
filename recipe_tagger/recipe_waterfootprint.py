@@ -65,6 +65,8 @@ def __get_quantites_formatted(ingredients, quantities, language):
         "gallon": 3800.0,
         "gallons": 3800.0,
         "pound": 454.0,
+        "clove": 1,
+        "cloves": 1,
     }
     values_units = [re.findall(r"[A-Za-z]+|\d+", q) for q in quantities]
     quantities = []
@@ -134,8 +136,6 @@ def get_ingredient_waterfootprint(
         not_yet_calculated = False
     else:
         ingredient_wf = __get_default_waterfootprint(ingredient, language=language)
-    print(ingredient_wf)
-    print(quantity)
     return (
         __calculate_waterfootprint(ingredient_wf, quantity)
         if not_yet_calculated
@@ -164,8 +164,6 @@ def get_recipe_waterfootprint(
         process_ingredients(ing, language=language) for ing in ingredients
     ]
     quantities = __get_quantites_formatted(proc_ingredients, quantities, language)
-    print(proc_ingredients)
-    print(quantities)
     total_wf = 0
     information_wf = {}
     for i in range(len(ingredients)):
@@ -177,5 +175,4 @@ def get_recipe_waterfootprint(
         )
         information_wf[ingredients[i]] = ing_wf
         total_wf = round(total_wf + ing_wf, 2)
-        print(ingredients[i], ":", ing_wf)
     return (total_wf, information_wf) if information else total_wf
