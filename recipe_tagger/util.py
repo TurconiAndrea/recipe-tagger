@@ -994,7 +994,7 @@ def __stem_word(string, language="en"):
     return stemmer.stem(string)
 
 
-def process_ingredients(ing, language="en"):
+def process_ingredients(ing, stem=True, language="en"):
     """
     Process all the ingredients string in order to retrieve only the word
     correspond to the single ingredients, without number, special charachters,
@@ -1015,7 +1015,7 @@ def process_ingredients(ing, language="en"):
         ing = __remove_stopwords(ing, language)
         ing = __remove_adjectives(ing, language)
         ing = __strip_multiple_whitespaces(ing)
-    ing = __stem_word(ing, language)
+    ing = __stem_word(ing, language) if stem else ing
     return ing.strip()
 
 
