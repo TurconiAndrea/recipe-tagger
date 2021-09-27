@@ -124,24 +124,27 @@ def search_ingredient_class(ingredient, language="en"):
     if " " in ingredient:
         ingredient = ingredient.split(" ")[-1]
 
+    categories = []
     dictionary = PyDictionary()
     wiki = wikipediaapi.Wikipedia(language)
 
-    page = wiki.page(ingredient)
-    meaning = (
-        dictionary.meaning(ingredient, disable_errors=True)["Noun"]
-        if dictionary.meaning(ingredient, disable_errors=True)
-        else None
-    )
-    ontology = ", ".join(meaning) if meaning else ""
+    try:
+        page = wiki.page(ingredient)
+        meaning = (
+            dictionary.meaning(ingredient, disable_errors=True)["Noun"]
+            if dictionary.meaning(ingredient, disable_errors=True)
+            else None
+        )
+        ontology = ", ".join(meaning) if meaning else ""
 
-    categories = []
-    for category in FoodCategory:
-        if page and re.search(r"\b({0})\b".format(category.name), page.summary):
-            categories.append(category.name)
-        if ontology and re.search(r"\b({0})\b".format(category.name), ontology):
-            categories.append(category.name)
-    return max(categories, key=categories.count) if len(categories) else None
+        for category in FoodCategory:
+            if page and re.search(r"\b({0})\b".format(category.name), page.summary):
+                categories.append(category.name)
+            if ontology and re.search(r"\b({0})\b".format(category.name), ontology):
+                categories.append(category.name)
+    except:
+        pass
+    return max(categories, key=categories.count) if categories else None
 
 
 def get_ingredient_class(ingredient, language="en"):
