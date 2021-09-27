@@ -67,6 +67,8 @@ def __get_quantites_formatted(ingredients, quantities, language):
         "pound": 454.0,
         "clove": 1,
         "cloves": 1,
+        "lb": 453.5,
+        "lbs": 453.5,
     }
     values_units = [re.findall(r"[A-Za-z]+|\d+", q) for q in quantities]
     quantities = []
