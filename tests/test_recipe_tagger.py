@@ -7,7 +7,7 @@ import pytest
 from recipe_tagger import recipe_tagger
 
 
-# @pytest.mark.skip()
+@pytest.mark.skip()
 def test_is_ingredient_vegan():
     """
     Test for is_ingredient_vegan method.
@@ -18,7 +18,7 @@ def test_is_ingredient_vegan():
     assert recipe_tagger.is_ingredient_vegan("chicken") == False
 
 
-# @pytest.mark.skip()
+@pytest.mark.skip()
 def test_is_recipe_vegan():
     """
     Test for is_recipe_vegan method.
@@ -29,7 +29,7 @@ def test_is_recipe_vegan():
     assert recipe_tagger.is_recipe_vegan(["apple", "pear"]) == True
 
 
-# @pytest.mark.skip()
+@pytest.mark.skip()
 def test_add_ingredient():
     """
     Test for add_ingredient method.
@@ -38,7 +38,7 @@ def test_add_ingredient():
     assert recipe_tagger.add_ingredient("milk", "dairy") == False
 
 
-# @pytest.mark.skip()
+@pytest.mark.skip()
 def test_search_ingredient_hypernyms():
     """
     Test for search_ingredient_hypernyms method.
@@ -52,7 +52,7 @@ def test_search_ingredient_hypernyms():
     assert recipe_tagger.search_ingredient_hypernyms("egg") == "egg"
 
 
-# @pytest.mark.skip()
+@pytest.mark.skip()
 def test_search_ingredient_class():
     """
     Test for search_ingredient_class method.
@@ -76,12 +76,12 @@ def test_get_ingredient_class():
     assert recipe_tagger.get_ingredient_class("chicken") == "meat"
     assert recipe_tagger.get_ingredient_class("cattle") == "meat"
     assert recipe_tagger.get_ingredient_class("milk") == "dairy"
-    assert recipe_tagger.get_ingredient_class("porcini") == "mushroom"
+    assert recipe_tagger.get_ingredient_class("porcini", language="it") == "mushroom"
     assert recipe_tagger.get_ingredient_class("chips") == "snack"
-    assert recipe_tagger.get_ingredient_class("orata", "it") == "seafood"
+    assert recipe_tagger.get_ingredient_class("orata", language="it") == "seafood"
 
 
-# @pytest.mark.skip()
+@pytest.mark.skip()
 def test_get_recipe_class_percentage():
     """
     Test for get_recipe_class_percentage method.
@@ -93,7 +93,7 @@ def test_get_recipe_class_percentage():
     ) == [("meat", "66.67%"), ("fruit", "33.33%")]
 
 
-# @pytest.mark.skip()
+@pytest.mark.skip()
 def test_get_recipe_tags():
     """
     Test for get_recipe_tags method.

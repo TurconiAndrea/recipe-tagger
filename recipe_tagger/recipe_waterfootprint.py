@@ -26,16 +26,19 @@ def __calculate_waterfootprint(wf_ing, quantity):
     return round((wf_ing * quantity) / 1000, 2)
 
 
-def __get_default_waterfootprint(ingredient, language="en"):
+def __get_default_waterfootprint(ingredient, online_search=True, language="en"):
     """
     Get the defualt water footprint of a food category. The recipe tagger
     module is used to predict the class of the ingredient.
 
     :param ingredient: the ingredient to be classified.
+    :param online_search: allows to disable wikipedia search.
     :param language: the language of the ingredient.
     :return: the defualt water footprint of the predicted category.
     """
-    ing_class = get_ingredient_class(ingredient, language)
+    ing_class = get_ingredient_class(
+        ingredient, online_search=online_search, language=language
+    )
     return FoodCategoryWaterFootprint[ing_class].value if ing_class != None else 50
 
 
@@ -101,7 +104,12 @@ def __get_quantites_formatted(ingredients, quantities, language):
 
 
 def get_ingredient_waterfootprint(
-    ingredient, quantity, embedding=None, process=False, language="en"
+    ingredient,
+    quantity,
+    online_search=True,
+    embedding=None,
+    process=False,
+    language="en",
 ):
     """
     Get the water footprint of the provided ingredient based on the quantity.
@@ -111,6 +119,7 @@ def get_ingredient_waterfootprint(
 
     :param ingredient: the name of the ingredient.
     :param quantity: the quantity of ingredient to calculate water footprint. (in gr)
+    :param online_search: allows to disable wikipedia search.
     :param embedding: the water footprint embedding.
     :param process: a bool indicating if the provided ingredient must be processed.
     :param language: the language of the ingredient.
@@ -137,14 +146,20 @@ def get_ingredient_waterfootprint(
         ]
         wfs = [
             get_ingredient_waterfootprint(
-                ing, quantity / len(ings), language=language, embedding=embedding
+                ing,
+                quantity / len(ings),
+                online_search=online_search,
+                language=language,
+                embedding=embedding,
             )
             for ing in ings
         ]
         ingredient_wf = sum(wfs)
         not_yet_calculated = False
     else:
-        ingredient_wf = __get_default_waterfootprint(ingredient, language=language)
+        ingredient_wf = __get_default_waterfootprint(
+            ingredient, online_search=online_search, language=language
+        )
     return (
         __calculate_waterfootprint(ingredient_wf, quantity)
         if not_yet_calculated
@@ -153,7 +168,7 @@ def get_ingredient_waterfootprint(
 
 
 def get_recipe_waterfootprint(
-    ingredients, quantities, information=False, language="en"
+    ingredients, quantities, online_search=True, information=False, language="en"
 ):
     """
     Get the water footprint of a recipe, providing the ingredients and the
@@ -162,6 +177,7 @@ def get_recipe_waterfootprint(
     without spaces (10gr).
     :param ingredients: a list containing all the ingredients of the recipe.
     :param quanities: a list containing all the quantities of the recipe ingredients.
+    :param online_search: allows to disable wikipedia search.
     :param information: a dictionary containing the ingredients and its water footprint.
     :param language: the language of the ingredients.
     :return: an integer representing the water footprint of the recipe and if information
@@ -179,6 +195,7 @@ def get_recipe_waterfootprint(
         ing_wf = get_ingredient_waterfootprint(
             proc_ingredients[i],
             quantities[i],
+            online_search=online_search,
             embedding=wf_embedding,
             language=language,
         )

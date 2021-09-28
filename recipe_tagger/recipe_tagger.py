@@ -111,7 +111,7 @@ def search_ingredient_hypernyms(ingredient):
         return FoodCategory(sum.index(max(sum))).name
 
 
-def search_ingredient_class(ingredient, language="en"):
+def search_ingredient_class(ingredient, online_search=True, language="en"):
     """
     Search on wikipedia and english dictionary the class of
     the provided ingredient.
@@ -119,6 +119,7 @@ def search_ingredient_class(ingredient, language="en"):
     the two research.
 
     :param ingredient: the name of the ingredient.
+    :param ingredient: allows to disable wikipedia search.
     :return: the class of the ingredient.
     """
     if " " in ingredient:
@@ -126,10 +127,10 @@ def search_ingredient_class(ingredient, language="en"):
 
     categories = []
     dictionary = PyDictionary()
-    wiki = wikipediaapi.Wikipedia(language)
+    wiki = wikipediaapi.Wikipedia(language) if online_search else None
 
     try:
-        page = wiki.page(ingredient)
+        page = wiki.page(ingredient) if online_search else None
         meaning = (
             dictionary.meaning(ingredient, disable_errors=True)["Noun"]
             if dictionary.meaning(ingredient, disable_errors=True)
@@ -147,13 +148,14 @@ def search_ingredient_class(ingredient, language="en"):
     return max(categories, key=categories.count) if categories else None
 
 
-def get_ingredient_class(ingredient, language="en"):
+def get_ingredient_class(ingredient, online_search=True, language="en"):
     """
     Predict the class of the provided ingredient based on the embeddings.
     If the ingredient cannot be found in the dictionary it will be
     searched on wikipedia pages or hypernyms.
 
     :param ingredient: the name of the ingredient.
+    :praram online_search: allows to disable wikipedia search
     :param language: the language of the ingredient.
     :return: the class of the ingredient.
     """
@@ -163,38 +165,51 @@ def get_ingredient_class(ingredient, language="en"):
         return FoodCategory(embedding[cleaned_ing]).name
     elif " " in cleaned_ing:
         ings = [ing for ing in cleaned_ing.split()]
-        classes = [get_ingredient_class(ing, language=language) for ing in ings]
+        classes = [
+            get_ingredient_class(ing, online_search=online_search, language=language)
+            for ing in ings
+        ]
         classes = [cl for cl in classes if cl]
         return classes[0] if classes else None
     else:
-        web_class = search_ingredient_class(ingredient, language)
-        hyp_class = search_ingredient_hypernyms(cleaned_ing)
-        return web_class if web_class else hyp_class
+        web_class = search_ingredient_class(
+            ingredient, online_search=online_search, language=language
+        )
+        web_class = web_class if web_class else search_ingredient_hypernyms(cleaned_ing)
+        return web_class
 
 
-def get_recipe_class_percentage(ingredients, language="en"):
+def get_recipe_class_percentage(ingredients, online_search=True, language="en"):
     """
     Classify a recipe in tags based on its ingredient.
     Returns the percentages of ingredient class in the recipe provided.
 
     :param ingredients: list of ingredients in the recipe.
+    :param online_search: allows to disable wikipedia search
     :return: list of tuples containg classes and percentages.
     """
-    tags = [get_ingredient_class(ingredient, language) for ingredient in ingredients]
+    tags = [
+        get_ingredient_class(ingredient, online_search=online_search, language=language)
+        for ingredient in ingredients
+    ]
     c = Counter(tags)
     return [(i, str(round(c[i] / len(tags) * 100.0, 2)) + "%") for i in c]
 
 
-def get_recipe_tags(ingredients, language="en"):
+def get_recipe_tags(ingredients, online_search=True, language="en"):
     """
     Classify a recipe in tags based on its ingredient.
     Tag could be: Vegetable, Fruit, Meat, Legume, Diary,
     Egg, Staple, Condiment, Nut, Seafood
 
     :param ingredients: list of ingredients in the recipe.
+    :param online_search: allows to disable wikipedia search
     :return: set of tags for the recipe.
     """
-    tags = [get_ingredient_class(ingredient, language) for ingredient in ingredients]
+    tags = [
+        get_ingredient_class(ingredient, online_search=online_search, language=language)
+        for ingredient in ingredients
+    ]
     if None in tags:
         tags.remove(None)
     if len(tags) >= 2 and FoodCategory.condiment.name in tags:
