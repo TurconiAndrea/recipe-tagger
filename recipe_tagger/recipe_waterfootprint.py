@@ -53,6 +53,7 @@ def __get_quantites_formatted(ingredients, quantities, language):
     units = {
         "ml": 1.0,
         "gr": 1.0,
+        "g": 1.0,
         "KG": 1000.0,
         "kg": 1000.0,
         "L": 1000.0,
@@ -60,8 +61,10 @@ def __get_quantites_formatted(ingredients, quantities, language):
         "ounce": 28.0,
         "ounces": 28.0,
         "oz": 28.0,
+        "teaspoons": 5.0,
         "teaspoon": 5.0,
         "tsp": 5.0,
+        "tablespoons": 15.0,
         "tablespoon": 15.0,
         "tbsp": 15.0,
         "cup": 237.0,
