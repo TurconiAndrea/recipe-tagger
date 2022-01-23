@@ -73,7 +73,7 @@ wf.get_ingredient_waterfootprint("tomato", 20, process=True, language="en")
 # 4.28
 ```
 
-**Get the water footprint of a recipe (it is needed to prived all the ingredients and the quantity of the recipe)**
+**Get the water footprint of a recipe (it is needed to provide all the ingredients and the quantity of the recipe)**
 
 In order to provide a precise calculation of the WF, it is needed to provide also the quantity used for the ingredient in the recipe. 
 Quanities must be provided matching the following pattern: "{number}{unit}". Unit can be one of ml, gr, kg, l, ounce, teaspoon, tablespoon, cup, pint quart, gallon, pound, clove, lb, or their abbreviation.
@@ -105,6 +105,9 @@ Default language is English, if the "language" argument is not provided.
 - English ("en")
 - Italian ("it")
 
+
+## How to provide a new language?
+The project's goal is to continuously deliver precise findings and to rely on ai when necessary. As a result, the majority of the ingredients are listed in text files with the appropriate categorisation. Hence, in order to provide a new language it is mandatory to follow these steps. 
 
 ## Todo
 - [x] Handling of Wikipedia pages.
