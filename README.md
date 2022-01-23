@@ -110,5 +110,6 @@ Default language is English, if the "language" argument is not provided.
 - [x] Handling of Wikipedia pages.
 - [x] Better search over dictionary and Wikipedia pages of ingredient.
 - [x] Calculate the water foorprint of a recipe
-- [ ] A the possibility to add an ingredient after search if it is not present into the embedding.
+- [ ] Add the possibility to add an ingredient after search if it is not present into the embedding.
 - [ ] An explanation in order to provided an other language. 
+- [ ] A method for automatic translation when providing another language. 

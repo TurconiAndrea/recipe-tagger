@@ -17,7 +17,7 @@ setup(
     name="recipe-tagger",
     packages=find_packages(include=["recipe_tagger"]),
     version="0.4.12",
-    description="A library for tagging and classify recipes",
+    description="A library for tagging, classify and calculate the water footprint of food recipes",
     author="Andrea Turconi",
     license="MIT",
     long_description=README,
@@ -36,5 +36,5 @@ setup(
         "stop-words",
     ],
     test_suite="tests",
-    package_data={"": ["data/*.npy"]},
+    package_data={"": ["data/*.npy", "provider/*.json"]},
 )
