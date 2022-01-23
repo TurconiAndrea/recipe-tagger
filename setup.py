@@ -16,14 +16,14 @@ README = (HERE / "README.md").read_text()
 setup(
     name="recipe-tagger",
     packages=find_packages(include=["recipe_tagger"]),
-    version="0.4.12",
+    version="0.4.13",
     description="A library for tagging, classify and calculate the water footprint of food recipes",
     author="Andrea Turconi",
     license="MIT",
     long_description=README,
     long_description_content_type="text/markdown",
     url="https://github.com/TurconiAndrea/recipe-tagger",
-    download_url="https://github.com/TurconiAndrea/recipe-tagger/archive/refs/tags/0.4.12.tar.gz",
+    download_url="https://github.com/TurconiAndrea/recipe-tagger/archive/refs/tags/0.4.13.tar.gz",
     keywords=["food", "recipe", "tag", "tagging", "ingredient", "water footprint"],
     install_requires=[
         "wikipedia-api",
